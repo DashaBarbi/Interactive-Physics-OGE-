@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контейнеры: верхний и два нижних</title>
+    <link rel="stylesheet" href="static/styles/stINT.css">
+</head>
+
+<body>
+    <div class="meny">
+        <a href="index.html">
+            <h2>← Главное меню</h2>
+        </a>
+    </div>
+
+    <h1>Линзы и изображения</h1>
+
+    <div class="container-wrapper">
+        <div class="top-container">
+            <h2>Интерактив</h2>
+            <div class="simulation-container">
+                <canvas id="cv" width="600" height="280"></canvas>
+                <div class="sim-controls">
+
+                    <div class="control-group">
+                        <label>Тип линзы</label>
+                        <select id="lensSelect" onchange="setLens(this.value)">
+                            <option value="c" selected>Собирающая</option>
+                            <option value="d">Рассеивающая</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Фокусное расстояние F</label>
+                        <input type="range" id="sF" min="40" max="200" value="100" oninput="upd()">
+                        <span id="vF">100 см</span>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Расстояние предмета d</label>
+                        <input type="range" id="sD" min="30" max="400" value="250" oninput="upd()">
+                        <span id="vD">250 см</span>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Высота предмета h</label>
+                        <input type="range" id="sH" min="20" max="120" value="60" oninput="upd()">
+                        <span id="vH">60 см</span>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Построительные лучи</label>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" id="r0" checked onchange="tR(0)">
+                                <span class="ray-label ray1">Параллельный оси</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" id="r1" checked onchange="tR(1)">
+                                <span class="ray-label ray2">Через фокус</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" id="r2" checked onchange="tR(2)">
+                                <span class="ray-label ray3">Через оптический центр</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="sim-buttons">
+                        <button class="btn-reset" onclick="resetAll()">⟳ Сбросить</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Результаты -->
+            <div class="lens-results">
+                <h4>Характеристики изображения</h4>
+                <div class="result-grid">
+                    <div class="result-item">
+                        <span class="result-label">Тип</span>
+                        <span class="result-value" id="rT">Действительное</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Размер</span>
+                        <span class="result-value" id="rS">Увеличенное</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Ориентация</span>
+                        <span class="result-value" id="rO">Перевёрнутое</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Расстояние f</span>
+                        <span class="result-value" id="rDi">167 см</span>
+                    </div>
+                </div>
+                <div class="formula-box">
+                    1/F = 1/d + 1/f<br>
+                    <span id="fT">1/100 = 1/250 + 1/f → f ≈ 167</span>
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <div class="bottom-row">
+            <div class="bottom-container left-container">
+                <h3>Теория</h3>
+                <div class="teoryContainer">
+                    <p>Линза – оптически прозрачное тело, ограниченное с двух сторон сферическими поверхностями.
+                    </p>
+                    <p>Оптическая ось – прямая, проходящая через центры сферических поверхностей, ограничивающих
+                        линзу.
+                    </p>
+                    <p>Главный фокус линзы – точка, в которой собираются параллельные главной оптической оси
+                        лучи. У
+                        каждой
+                        линзы два фокуса.</p>
+                    <p>Фокусное расстояние линзы – расстояние от линзы до её фокуса. (F)</p>
+                    <p>Линзы, преобразующие параллельный пучок в сходящийся пучок и собирающие его в одну точку,
+                        называются
+                        собирающими.</p>
+                    <p>Линзы, которые преобразуют пучок параллельных лучей в расходящийся, называются
+                        рассеивающими.
+                    </p>
+                    <p>Линзы с более выпуклыми поверхностями преломляют лучи сильнее, чем линзы с меньшей
+                        кривизной.</p>
+                    <p>Оптическая сила линзы – величина, обратная её главному фокусному расстоянию. Измеряется в
+                        диоптриях.
+                        D = 1/F </p>
+                    <p>Изображения, даваемые линзой:</p>
+                    <p>Если изображение есть, то оно называется действительным.</p>
+                    <p>Размеры и расположение изображения предмета в собирающей линзе зависят от положения
+                        предмета
+                        относительно линзы.</p>
+                    <p>d – расстояние от источника света до линзы.</p>
+                    <p>f – расстояние от линзы до изображения.</p>
+                    <p>F – фокусное расстояние линзы. </p>
+                    <p>2F – двойное фокусное расстояние.</p>
+                    <p>Собирающая линза:</p>
+                    <p>1) d > F: F < f < 2F Изображение действительное, перевёрнутое, уменьшенное.</p>
+                            <p>2) F < d < 2F: 2F < f Изображение действительное, перевёрнутое, увеличенное.</p>
+                                    <p>3) d < F: F < f < 2F Изображение мнимое, прямое, увеличенное.</p>
+                                            <p>4) d = F: Лучи параллельны, поэтому изображения нет. </p>
+                                            <p>5) d = 2F: f = 2F Изображение действительное, перевёрнутое,
+                                                равное.</p>
+                                            <p>Рассеивающая линза:</p>
+                                            <p>Изображение не зависит от положения предмета относительно линзы.
+                                            </p>
+                                            <p>Изображение уменьшенное, прямое, мнимое.</p>
+                                            <p>Формула тонкой линзы: D = 1/F = 1/d + 1/f</p>
+                                            <p>Для построения изображения используют:</p>
+                                            <p>1) Луч, который идёт параллельно главной оптической оси, после
+                                                преломления в
+                                                линзе проходит через её фокус. </p>
+                                            <p>2) Луч, проходящий через оптический центр линзы, не преломляется.
+                                            </p>
+                                            <p>3) Луч, проходящий через фокус, после преломления в линзе идёт
+                                                параллельно
+                                                оптической оси. </p>
+
+                                    </p>
+                            </p>
+                    </p>
+
+                </div>
+            </div>
+            <div class="bottom-container right-container">
+                <h3>Задачи из открытого банка ФИПИ</h3>
+                <div id="taskContainer">
+
+                    <script>
+                        const tasks = [
+                            { q: "", a: "" },
+                            { q: "", a: "" },
+                            { q: "", a: "" },
+                            { q: "", a: "" },
+                            { q: "", a: "" },
+                            { q: "", a: "" },
+                            { q: "", a: "" },
+                            { q: "", a: "" },
+                            { q: "", a: "" },
+                            { q: "", a: "" },
+                            { q: "", a: "" },
+                            { q: "", a: "" },
+                            { q: "", a: "" },
+                            { q: "", a: "" },
+                            { q: "", a: "" },
+                            { q: "", a: "" },
+                            { q: "", a: "" },
+                            { q: "", a: "" },
+                            { q: "", a: "" }
+                        ];
+
+                        let current = 0;
+
+                        function showTask() {
+                            const task = tasks[current];
+                            const container = document.getElementById('taskContainer');
+
+                            let html = `
+            <h3 style="color: black; ">Вопрос ${current + 1} из ${tasks.length}</h3>
+            <p style = "color: black;">${task.q}</p>
+        `;
+
+                            if (task.img) {
+                                html += `<img src="${task.img}" width="400"  style="margin:15px 0;"><br>`;
+                            }
+
+                            html += `
+            <input type="text" id="userAnswer" placeholder="Ответ">
+            <button onclick="check()">Проверить</button>
+            <div id="result" style="margin-top:10px;"></div>
+        `;
+
+                            container.innerHTML = html;
+                        }
+
+                        function check() {
+                            const answer = document.getElementById('userAnswer').value.toLowerCase().trim();
+                            const result = document.getElementById('result');
+
+                            if (answer === tasks[current].a.toLowerCase()) {
+                                result.innerHTML = "<span style='color:green'>Верно!</span>";
+                                setTimeout(() => {
+                                    current++;
+                                    if (current < tasks.length) {
+                                        showTask();
+                                    } else {
+                                        document.getElementById('taskContainer').innerHTML =
+                                            "<h2>Тест завершен!</h2>";
+                                    }
+                                }, 1000);
+                            } else {
+                                result.innerHTML = "<span style='color:red'> Неверно, попробуйте еще раз</span>";
+                            }
+                        }
+
+                        // Запускаем
+                        showTask();
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="static/styles/IntLinz.js"></script>
+</body>
+
+</html>
