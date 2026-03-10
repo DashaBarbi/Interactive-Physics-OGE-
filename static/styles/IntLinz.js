@@ -1,3 +1,8 @@
+/* ═══════════════════════════════════════════════════
+   script.js — Построение изображений в тонких линзах
+   ═══════════════════════════════════════════════════ */
+
+// ══════════════════════ СОСТОЯНИЕ ══════════════════════
 const cv = document.getElementById('cv');
 const cx = cv.getContext('2d');
 
@@ -8,7 +13,6 @@ let hv = 60;          // высота предмета
 let ry = [1, 1, 1];   // включённые лучи
 let dr = false;        // перетаскивание активно
 let dt = null;         // тип: 'p' — позиция, 'h' — высота
-let sc = 1;            // масштаб: 1px = 1см на десктопе, меньше на мобильных
 
 // Цвета
 const CO = {
@@ -140,10 +144,6 @@ function ext(x1, y1, x2, y2, w) {
 
 function drw() {
   var w = gW(), h = gH(), lc = gLC();
-
-  // Масштаб: на экране шире 800px — 1:1, на мобильных — пропорционально меньше
-  sc = Math.min(1, w / 800);
-
   cx.clearRect(0, 0, w, h);
   cx.fillStyle = CO.bg;
   cx.fillRect(0, 0, w, h);
@@ -197,69 +197,68 @@ function drw() {
   cx.fillText('Линза', lc.x, lc.y - lH / 2 - 12);
   cx.restore();
 
-  // Фокусные точки (с масштабом sc)
+  // Фокусные точки
   cx.save();
   var fc = lCol;
-  [[-Fv * sc, 'F'], [Fv * sc, "F'"]].forEach(function(pair) {
+  [[-Fv, 'F'], [Fv, "F'"]].forEach(function(pair) {
     var dx = pair[0], lb = pair[1], px = lc.x + dx;
     cx.fillStyle = fc; cx.beginPath(); cx.arc(px, lc.y, 5, 0, Math.PI * 2); cx.fill();
     cx.fillStyle = CO.bg; cx.beginPath(); cx.arc(px, lc.y, 2, 0, Math.PI * 2); cx.fill();
     cx.font = '700 12px Segoe UI, sans-serif'; cx.fillStyle = fc; cx.textAlign = 'center';
     cx.fillText(lb, px, lc.y + 22);
   });
-  [[-2 * Fv * sc, '2F'], [2 * Fv * sc, "2F'"]].forEach(function(pair) {
+  [[-2 * Fv, '2F'], [2 * Fv, "2F'"]].forEach(function(pair) {
     var dx = pair[0], lb = pair[1], px = lc.x + dx;
     cx.globalAlpha = 0.5; cx.fillStyle = fc; cx.beginPath(); cx.arc(px, lc.y, 3.5, 0, Math.PI * 2); cx.fill();
     cx.globalAlpha = 1; cx.font = '600 10px Segoe UI, sans-serif'; cx.textAlign = 'center'; cx.fillText(lb, px, lc.y + 18);
   });
   cx.restore();
 
-  // Предмет (с масштабом sc)
-  var ox = lc.x - dv * sc, oy = lc.y - hv * sc;
+  var ox = lc.x - dv, oy = lc.y - hv;
   da(ox, lc.y, ox, oy, '#6995f5', 3);
   cx.save(); cx.font = '600 12px Segoe UI, sans-serif'; cx.fillStyle = '#6995f5'; cx.textAlign = 'center';
   cx.fillText('Предмет', ox, lc.y + 20); cx.restore();
 
+
   var im = cImg();
 
   if (isFinite(im.di)) {
-    // Изображение (с масштабом sc)
-    var ix = lc.x + im.di * sc, iy = lc.y - im.hi * sc;
-    drawRays(lc, ox, oy, w, sc);
+    var ix = lc.x + im.di, iy = lc.y - im.hi;
+    drawRays(lc, ox, oy, w);
     var ic = im.re ? '#10b981' : '#e17055';
     if (im.re) da(ix, lc.y, ix, iy, ic, 3); else dad(ix, lc.y, ix, iy, ic, 3);
     cx.save(); cx.font = '600 12px Segoe UI, sans-serif'; cx.fillStyle = ic; cx.textAlign = 'center';
     cx.fillText(im.re ? 'Изображение' : 'Мнимое изобр.', ix, lc.y + 20); cx.restore();
     updR(im);
   } else {
-    drawRaysInf(lc, ox, oy, w, sc);
+    drawRaysInf(lc, ox, oy, w);
     updRI();
   }
 }
 
 // ══════════════════════ ЛУЧИ ══════════════════════
 
-function drawRays(lc, ox, oy, w, s) {
+function drawRays(lc, ox, oy, w) {
   if (ry[0]) {
     dl(ox, oy, lc.x, oy, CO.r1, 1.8);
-    if (lt === 'c') { var e = ext(lc.x, oy, lc.x + Fv * s, lc.y, w); dl(lc.x, oy, e.x, e.y, CO.r1, 1.8); }
-    else { var fsx = lc.x - Fv * s, e2 = ext(fsx, lc.y, lc.x, oy, w); dl(lc.x, oy, e2.x, e2.y, CO.r1, 1.8); dl(lc.x, oy, fsx, lc.y, CO.r1, 1.8, [8, 6]); }
+    if (lt === 'c') { var e = ext(lc.x, oy, lc.x + Fv, lc.y, w); dl(lc.x, oy, e.x, e.y, CO.r1, 1.8); }
+    else { var fsx = lc.x - Fv, e2 = ext(fsx, lc.y, lc.x, oy, w); dl(lc.x, oy, e2.x, e2.y, CO.r1, 1.8); dl(lc.x, oy, fsx, lc.y, CO.r1, 1.8, [8, 6]); }
   }
   if (ry[1]) {
     if (lt === 'c') {
-      var flx = lc.x - Fv * s, sl = (lc.y - oy) / (flx - ox), yl = oy + sl * (lc.x - ox);
+      var flx = lc.x - Fv, sl = (lc.y - oy) / (flx - ox), yl = oy + sl * (lc.x - ox);
       dl(ox, oy, lc.x, yl, CO.r2, 1.8); dl(lc.x, yl, w + 50, yl, CO.r2, 1.8);
     } else {
-      var frx = lc.x + Fv * s, sl2 = (lc.y - oy) / (frx - ox), yl2 = oy + sl2 * (lc.x - ox);
+      var frx = lc.x + Fv, sl2 = (lc.y - oy) / (frx - ox), yl2 = oy + sl2 * (lc.x - ox);
       dl(ox, oy, lc.x, yl2, CO.r2, 1.8); dl(lc.x, yl2, w + 50, yl2, CO.r2, 1.8); dl(lc.x, yl2, frx, lc.y, CO.r2, 1.8, [8, 6]);
     }
   }
   if (ry[2]) { var e3 = ext(ox, oy, lc.x, lc.y, w); dl(ox, oy, e3.x, e3.y, CO.r3, 1.8); }
 }
 
-function drawRaysInf(lc, ox, oy, w, s) {
+function drawRaysInf(lc, ox, oy, w) {
   if (ry[0]) { dl(ox, oy, lc.x, oy, CO.r1, 1.8); dl(lc.x, oy, w + 50, oy, CO.r1, 1.8); }
-  if (ry[1]) { var flx = lc.x - Fv * s, sl = (lc.y - oy) / (flx - ox), yl = oy + sl * (lc.x - ox); dl(ox, oy, lc.x, yl, CO.r2, 1.8); dl(lc.x, yl, w + 50, yl, CO.r2, 1.8); }
+  if (ry[1]) { var flx = lc.x - Fv, sl = (lc.y - oy) / (flx - ox), yl = oy + sl * (lc.x - ox); dl(ox, oy, lc.x, yl, CO.r2, 1.8); dl(lc.x, yl, w + 50, yl, CO.r2, 1.8); }
   if (ry[2]) { var e = ext(ox, oy, lc.x, lc.y, w); dl(ox, oy, e.x, e.y, CO.r3, 1.8); }
 }
 
@@ -302,7 +301,7 @@ function updRI() {
 
 cv.addEventListener('mousedown', function(e) {
   var r = cv.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top;
-  var lc = gLC(), ox = lc.x - dv * sc, oy = lc.y - hv * sc;
+  var lc = gLC(), ox = lc.x - dv, oy = lc.y - hv;
   if (Math.abs(mx - ox) < 20 && my > oy - 15 && my < lc.y + 10) {
     dr = true; dt = Math.abs(my - oy) < 20 ? 'h' : 'p';
   }
@@ -311,8 +310,8 @@ cv.addEventListener('mousedown', function(e) {
 cv.addEventListener('mousemove', function(e) {
   if (!dr) return;
   var r = cv.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top, lc = gLC();
-  if (dt === 'p') { dv = Math.round(Math.max(30, Math.min(400, (lc.x - mx) / sc))); document.getElementById('sD').value = dv; document.getElementById('vD').textContent = dv + ' см'; }
-  else { hv = Math.round(Math.max(20, Math.min(120, (lc.y - my) / sc))); document.getElementById('sH').value = hv; document.getElementById('vH').textContent = hv + ' см'; }
+  if (dt === 'p') { dv = Math.round(Math.max(30, Math.min(400, lc.x - mx))); document.getElementById('sD').value = dv; document.getElementById('vD').textContent = dv + ' см'; }
+  else { hv = Math.round(Math.max(20, Math.min(120, lc.y - my))); document.getElementById('sH').value = hv; document.getElementById('vH').textContent = hv + ' см'; }
   drw();
 });
 
@@ -322,7 +321,7 @@ cv.addEventListener('mouseleave', function() { dr = false; });
 cv.addEventListener('touchstart', function(e) {
   e.preventDefault();
   var t = e.touches[0], r = cv.getBoundingClientRect(), mx = t.clientX - r.left, my = t.clientY - r.top;
-  var lc = gLC(), ox = lc.x - dv * sc, oy = lc.y - hv * sc;
+  var lc = gLC(), ox = lc.x - dv, oy = lc.y - hv;
   if (Math.abs(mx - ox) < 30 && my > oy - 20 && my < lc.y + 15) {
     dr = true; dt = Math.abs(my - oy) < 25 ? 'h' : 'p';
   }
@@ -331,8 +330,8 @@ cv.addEventListener('touchstart', function(e) {
 cv.addEventListener('touchmove', function(e) {
   if (!dr) return; e.preventDefault();
   var t = e.touches[0], r = cv.getBoundingClientRect(), mx = t.clientX - r.left, my = t.clientY - r.top, lc = gLC();
-  if (dt === 'p') { dv = Math.round(Math.max(30, Math.min(400, (lc.x - mx) / sc))); document.getElementById('sD').value = dv; document.getElementById('vD').textContent = dv + ' см'; }
-  else { hv = Math.round(Math.max(20, Math.min(120, (lc.y - my) / sc))); document.getElementById('sH').value = hv; document.getElementById('vH').textContent = hv + ' см'; }
+  if (dt === 'p') { dv = Math.round(Math.max(30, Math.min(400, lc.x - mx))); document.getElementById('sD').value = dv; document.getElementById('vD').textContent = dv + ' см'; }
+  else { hv = Math.round(Math.max(20, Math.min(120, lc.y - my))); document.getElementById('sH').value = hv; document.getElementById('vH').textContent = hv + ' см'; }
   drw();
 }, { passive: false });
 
