@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контейнеры: верхний и два нижних</title>
+    <link rel="stylesheet" href="static/styles/stINT.css">
+</head>
+
+<body>
+    <div class="meny">
+        <a href="index.html">
+            <h2>← Главное меню</h2>
+        </a>
+    </div>
+
+    <h1>Линзы и изображения</h1>
+
+    <div class="container-wrapper">
+        <div class="top-container">
+            <h2>Интерактив</h2>
+            <div class="simulation-container">
+                <canvas id="cv" width="600" height="280"></canvas>
+                <div class="sim-controls">
+
+                    <div class="control-group">
+                        <label>Тип линзы</label>
+                        <select id="lensSelect" onchange="setLens(this.value)">
+                            <option value="c" selected>Собирающая</option>
+                            <option value="d">Рассеивающая</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Фокусное расстояние F</label>
+                        <input type="range" id="sF" min="40" max="200" value="100" oninput="upd()">
+                        <span id="vF">100 см</span>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Расстояние предмета d</label>
+                        <input type="range" id="sD" min="30" max="400" value="250" oninput="upd()">
+                        <span id="vD">250 см</span>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Высота предмета h</label>
+                        <input type="range" id="sH" min="20" max="120" value="60" oninput="upd()">
+                        <span id="vH">60 см</span>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Построительные лучи</label>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" id="r0" checked onchange="tR(0)">
+                                <span class="ray-label ray1">Параллельный оси</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" id="r1" checked onchange="tR(1)">
+                                <span class="ray-label ray2">Через фокус</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" id="r2" checked onchange="tR(2)">
+                                <span class="ray-label ray3">Через оптический центр</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="sim-buttons">
+                        <button class="btn-reset" onclick="resetAll()">⟳ Сбросить</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Результаты -->
+            <div class="lens-results">
+                <h4>Характеристики изображения</h4>
+                <div class="result-grid">
+                    <div class="result-item">
+                        <span class="result-label">Тип</span>
+                        <span class="result-value" id="rT">Действительное</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Размер</span>
+                        <span class="result-value" id="rS">Увеличенное</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Ориентация</span>
+                        <span class="result-value" id="rO">Перевёрнутое</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Расстояние f</span>
+                        <span class="result-value" id="rDi">167 см</span>
+                    </div>
+                </div>
+                <div class="formula-box">
+                    1/F = 1/d + 1/f<br>
+                    <span id="fT">1/100 = 1/250 + 1/f → f ≈ 167</span>
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <div class="bottom-row">
+            <div class="bottom-container left-container">
+                <h3>Теория</h3>
+                <div class="teoryContainer">
+                    <p>Линза – оптически прозрачное тело, ограниченное с двух сторон сферическими поверхностями.
+                    </p>
+                    <p>Оптическая ось – прямая, проходящая через центры сферических поверхностей, ограничивающих
+                        линзу.
+                    </p>
+                    <p>Главный фокус линзы – точка, в которой собираются параллельные главной оптической оси
+                        лучи. У
+                        каждой
+                        линзы два фокуса.</p>
+                    <p>Фокусное расстояние линзы – расстояние от линзы до её фокуса. (F)</p>
+                    <p>Линзы, преобразующие параллельный пучок в сходящийся пучок и собирающие его в одну точку,
+                        называются
+                        собирающими.</p>
+                    <p>Линзы, которые преобразуют пучок параллельных лучей в расходящийся, называются
+                        рассеивающими.
+                    </p>
+                    <p>Линзы с более выпуклыми поверхностями преломляют лучи сильнее, чем линзы с меньшей
+                        кривизной.</p>
+                    <p>Оптическая сила линзы – величина, обратная её главному фокусному расстоянию. Измеряется в
+                        диоптриях.
+                        D = 1/F </p>
+                    <p>Изображения, даваемые линзой:</p>
+                    <p>Если изображение есть, то оно называется действительным.</p>
+                    <p>Размеры и расположение изображения предмета в собирающей линзе зависят от положения
+                        предмета
+                        относительно линзы.</p>
+                    <p>d – расстояние от источника света до линзы.</p>
+                    <p>f – расстояние от линзы до изображения.</p>
+                    <p>F – фокусное расстояние линзы. </p>
+                    <p>2F – двойное фокусное расстояние.</p>
+                    <p>Собирающая линза:</p>
+                    <p>1) d > F: F < f < 2F Изображение действительное, перевёрнутое, уменьшенное.</p>
+                            <p>2) F < d < 2F: 2F < f Изображение действительное, перевёрнутое, увеличенное.</p>
+                                    <p>3) d < F: F < f < 2F Изображение мнимое, прямое, увеличенное.</p>
+                                            <p>4) d = F: Лучи параллельны, поэтому изображения нет. </p>
+                                            <p>5) d = 2F: f = 2F Изображение действительное, перевёрнутое,
+                                                равное.</p>
+                                            <p>Рассеивающая линза:</p>
+                                            <p>Изображение не зависит от положения предмета относительно линзы.
+                                            </p>
+                                            <p>Изображение уменьшенное, прямое, мнимое.</p>
+                                            <p>Формула тонкой линзы: D = 1/F = 1/d + 1/f</p>
+                                            <p>Для построения изображения используют:</p>
+                                            <p>1) Луч, который идёт параллельно главной оптической оси, после
+                                                преломления в
+                                                линзе проходит через её фокус. </p>
+                                            <p>2) Луч, проходящий через оптический центр линзы, не преломляется.
+                                            </p>
+                                            <p>3) Луч, проходящий через фокус, после преломления в линзе идёт
+                                                параллельно
+                                                оптической оси. </p>
+
+                                    </p>
+                            </p>
+                    </p>
+
+                </div>
+            </div>
+            <div class="bottom-container right-container">
+                <h3>Задачи из открытого банка ФИПИ</h3>
+                <div id="taskContainer">
+
+                    <script>
+                        const tasks = [
+                            { q: "На рисунке изображены четыре предмета: 1, 2, 3 и 4. Изображение какого предмета в тонкой собирающей линзе с фокусным расстоянием F будет увеличенным, перевёрнутым и действительным?", a: "2",img:"https://oge.fipi.ru/docs/B24AFED7DE6AB5BC461219556CCA4F9B/questions/14972B1B931E9C784391A59B3092B134/xs3qstsrc14972B1B931E9C784391A59B3092B134_16_1732181548.jpg"},
+                            { q: "На рисунке изображены четыре предмета: 1, 2, 3 и 4. Изображение какого предмета в тонкой собирающей линзе с фокусным расстоянием F будет уменьшенным, перевёрнутым и действительным?", a: "3",img:"static/images/задача 2LINZ.jpg" },
+                            { q: "В собирающей линзе с фокусным расстоянием 7 см изображение A¹ предмета A действительное и равное по высоте предмету (см. рисунок). На каком расстоянии от линзы находится предмет A?", a: "14",img:"https://3.shkolkovo.online/api/latex-service/v1/GetSession/152429/f-oge-9-4-12.png" },
+                            { q: "На рисунке изображены четыре предмета: 1, 2, 3 и 4. Изображение какого предмета в тонкой собирающей линзе с фокусным расстоянием F будет увеличенным, прямым и мнимым?", a: "1",img:"https://oge.fipi.ru/docs/B24AFED7DE6AB5BC461219556CCA4F9B/questions/FC0A75365475938046C8D34E62DF1838/xs3qstsrcFC0A75365475938046C8D34E62DF1838_16_1732181801.jpg" },
+                            { q: "На рисунке изображён ход луча, падающего на тонкую собирающую линзу с фокусным расстоянием F.Какая из линий – 1, 2, 3 или 4 – соответствует ходу прошедшего через линзу луча?", a: "3",img:"https://oge.fipi.ru/docs/B24AFED7DE6AB5BC461219556CCA4F9B/questions/167F2ABF7D9195BA48395E6A87411E3F/xs3qstsrc167F2ABF7D9195BA48395E6A87411E3F_4_1737721540.jpg" },
+                            { q: "Предмет находится на расстоянии l = 20 см от собирающей линзы (см. рисунок). При этом изображение предмета действительное и равное по высоте предмету. Чему равна оптическая сила линзы?", a: "10",img:"https://oge.fipi.ru/docs/B24AFED7DE6AB5BC461219556CCA4F9B/questions/1AAA01FF6D4BB56743E380D37A9D727A/xs3qstsrc2D6DB02F904AA8CC4C6CAF35C5CD25AC_1_1581335039.gif" },
+                            { q: "Тонкая линза, фокусное расстояние которой равно 5 см, даёт действительное изображение предмета такого же размера, что и предмет. На каком расстоянии от линзы находится предмет? ", a: "10" },
+                            { q: "На рисунке показаны оптический центр и оптическая ось собирающей линзы, а также ход двух лучей от светящейся точки А.Определите оптическую силу линзы.", a: "12,5",img:"https://oge.fipi.ru/docs/B24AFED7DE6AB5BC461219556CCA4F9B/questions/ECF33A87C5BEA90342BCCA6F1BC6185D/xs3qstsrcECF33A87C5BEA90342BCCA6F1BC6185D_3_1734006488.jpg" },
+                            { q: "Свеча длиной 12 см находится на расстоянии 30 см от собирающей линзы с фокусным расстоянием 15 см. Определите размер изображения свечи. ", a: "12" },
+                            { q: "На рисунке показаны оптический центр и оптическая ось тонкой собирающей линзы, а также дано построение четырёх лучей 1–4 в линзе. Чему равна оптическая сила линзы?", a: "6,25",img:"https://oge.fipi.ru/docs/B24AFED7DE6AB5BC461219556CCA4F9B/questions/5F25F0D239ADA917463BD23554F04F63/xs3qstsrc5F25F0D239ADA917463BD23554F04F63_9_1737719947.jpg" },
+                            { q: "В какой из точек находится изображение точечного источника S, создаваемое собирающей линзой с фокусным расстоянием F?", a: "1",img:"https://oge.fipi.ru/docs/B24AFED7DE6AB5BC461219556CCA4F9B/questions/B0F16582593F9217492454B206913EB9/xs3qstsrcB0F16582593F9217492454B206913EB9_3_1735044208.jpg" },
+                            { q: "<span style='display:block'>Прочитайте текст и вставьте на места пропусков слова из приведённого списка.</span><span style='display:block'>В оптике чаще всего используют сферические линзы, которые представляют собой стеклянные тела, ограниченные двумя сферическими поверхностями. По форме линза на рис. 1 является (А) __________. Если лучи, параллельные главной оптической оси линзы, после преломления на сферических поверхностях пересекаются в фокусе линзы, то такую линзу называют (Б)__________.</span><span style='display:block'>Линза на рис. 2 по форме относится к (В) __________. Если лучи, параллельные главной оптической оси линзы, после преломления идут расходящимся пучком, то такую линзу называют (Г)__________.</span><span style='display:block'>Список слов:</span><span style='display:block'>1) расходящаяся</span><span style='display:block'>2) сходящаяся</span><span style='display:block'>3) собирающая</span><span style='display:block'>4) рассеивающая</span><span style='display:block'>5) вогнутая</span><span style='display:block'>6) выгнутая</span><span style='display:block'>7) выпуклая</span>Запишите в таблицу выбранные цифры под соответствующими буквами.", a: "7354",img:"https://oge.fipi.ru/docs/B24AFED7DE6AB5BC461219556CCA4F9B/questions/B9BD8FB4CDBEA7694F050ABAC1235649/xs3qstsrcB9BD8FB4CDBEA7694F050ABAC1235649_16_1730453981.jpg" },
+                            { q: "<span style='display:block'>Предмет, находящийся на расстоянии 2F от собирающей линзы с фокусным расстоянием F, удаляют от линзы на расстояние 3F. Как при этом меняются оптическая сила линзы и размер изображения предмета?</span><span style='display:block'>Для каждой величины определите соответствующий характер изменения:</span><span style='display:block'>1) увеличивается</span><span style='display:block'>2) уменьшается</span><span style='display:block'>3) не изменяется</span>Запишите в таблицу выбранные цифры для каждой физической величины. Цифры в ответе могут повторяться.", a: "32",img:"static/images/задача 13LINZ.PNG" },
+                            { q: "<span style='display:block'>Предмет, находящийся за двойным фокусным расстоянием линзы, переместили дальше от двойного фокусного расстояния. Как при этом изменились расстояние между линзой и изображением предмета и высота изображения предмета?</span><span style='display:block'>Для каждой величины определите соответствующий характер изменения:</span><span style='display:block'>1) увеличилась</span><span style='display:block'>2) уменьшилась</span><span style='display:block'>3)не изменилась</span>Запишите в таблицу выбранные цифры для каждой физической величины. Цифры в ответе могут повторяться.", a: "22",img:"static/images/задача14LINZ.PNG" },
+                            { q: "<span style='display:block'>Прочитайте текст и вставьте на места пропусков слова (словосочетания) из приведённого списка.</span><span style='display:block'>В оптике чаще всего используют сферические линзы, которые представляют собой стеклянные тела, ограниченные двумя сферическими поверхностями. Для линз, изображённых на рисунке, лучи, параллельные главной оптической оси, после преломления на сферических поверхностях пересекаются в фокусе линзы, поэтому такие линзы называют (А)__________.</span><span style='display:block'>Линза с более выпуклыми поверхностями преломляет лучи (Б)__________, чем линза с меньшей кривизной. Преломляющую способность линзы характеризует величина, называемая (В)__________ линзы. Чем больше эта величина, тем (Г)__________ увеличение создает линза.</span><span style='display:block'>Список слов и словосочетаний:</span><span style='display:block'>1) большее</span><span style='display:block'>2) меньшее</span><span style='display:block'>3) рассеивающие</span><span style='display:block'>4) собирающие</span><span style='display:block'>5) пропускающая способность</span><span style='display:block'>6) оптическая сила</span><span style='display:block'>7) слабее</span><span style='display:block'>8) сильнее</span>Запишите в таблицу выбранные цифры под соответствующими буквами.", a: "4861",img:"https://oge.fipi.ru/docs/B24AFED7DE6AB5BC461219556CCA4F9B/questions/2FA7C86CBE7C91744AC9A2283F99B742/xs3qstsrc1053CA09A1F88CA5405744C5339EC6F8_1_1581077559.jpg" },
+                            { q: "<span style='display:block'>Предмет, находящийся на расстоянии 4F от собирающей линзы, приближают к линзе на расстояние 2F (F – фокусное расстояние линзы). Как при этом изменяются оптическая сила линзы и размер изображения предмета?</span><span style='display:block'>Для каждой величины определите соответствующий характер изменения:</span><span style='display:block'>1)	увеличивается</span><span style='display:block'>2)	уменьшается</span><span style='display:block'>3)	не изменяется</span>Запишите в таблицу выбранные цифры для каждой физической величины. Цифры в ответе могут повторяться.", a: "31",img:"static/images/задача16LINZ.PNG" },
+                            { q: "<span style='display:block'>С помощью собирающей линзы получено изображение А1В1 предмета АВ (см. рисунок). Как изменится фокусное расстояние линзы, а также яркость изображения, если закрыть чёрной бумагой нижнюю половину линзы?</span><span style='display:block'>Для каждой величины определите соответствующий характер изменения:</span> <span style='display:block'>1) увеличится</span> <span style='display:block'>2) уменьшится</span> <span style='display:block'>3) не изменится</span> Запишите в таблицу выбранные цифры для каждой физической величины. Цифры в ответе могут повторяться.", a: "32",img:"static/images/задача17LINZ.PNG" },
+                            { q: "<span style='display:block'>Человек переводит взгляд с заходящего на горизонте Солнца на собаку, сидящую у его ног.  Как при этом меняются фокусное расстояние и оптическая сила хрусталика глаза человека?</span><span style='display:block'>Для каждой величины определите соответствующий характер изменения:</span><span style='display:block'>1)	увеличивается</span><span style='display:block'>2)	уменьшается</span><span style='display:block'>3)	не изменяется</span>Запишите в таблицу выбранные цифры для каждой физической величины. Цифры в ответе могут повторяться.", a: "21",img:"static/images/задача18LINZ.PNG" },
+                            { q: "<span style='display:block'>Предмет, находящийся между фокусным и двойным фокусным расстоянием линзы, переместили ближе к двойному фокусному расстоянию. Как при этом изменились расстояние между линзой и изображением предмета и оптическая сила линзы?</span><span style='display:block'>Для каждой величины определите соответствующий характер изменения:</span><span style='display:block'>1) увеличилась</span><span style='display:block'>2) уменьшилась</span><span style='display:block'>3)не изменилась</span>Запишите в таблицу выбранные цифры для каждой физической величины. Цифры в ответе могут повторяться.", a: "23",img:"static/images/задача19LINZ.PNG" }
+                        ];
+
+                        let current = 0;
+
+                        function showTask() {
+                            const task = tasks[current];
+                            const container = document.getElementById('taskContainer');
+
+                            let html = `
+            <h3 style="color: black; ">Вопрос ${current + 1} из ${tasks.length}</h3>
+            <p style = "color: black;">${task.q}</p>
+        `;
+
+                            if (task.img) {
+                                html += `<img src="${task.img}" width="400"  style="margin:15px 0;"><br>`;
+                            }
+
+                            html += `
+            <input type="text" id="userAnswer" placeholder="Ответ">
+            <button onclick="check()">Проверить</button>
+            <div id="result" style="margin-top:10px;"></div>
+        `;
+
+                            container.innerHTML = html;
+                        }
+
+                        function check() {
+                            const answer = document.getElementById('userAnswer').value.toLowerCase().trim();
+                            const result = document.getElementById('result');
+
+                            if (answer === tasks[current].a.toLowerCase()) {
+                                result.innerHTML = "<span style='color:green'>Верно!</span>";
+                                setTimeout(() => {
+                                    current++;
+                                    if (current < tasks.length) {
+                                        showTask();
+                                    } else {
+                                        document.getElementById('taskContainer').innerHTML =
+                                            "<h2>Тест завершен!</h2>";
+                                    }
+                                }, 1000);
+                            } else {
+                                result.innerHTML = "<span style='color:red'> Неверно, попробуйте еще раз</span>";
+                            }
+                        }
+
+                        // Запускаем
+                        showTask();
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="static/styles/IntLinz.js"></script>
+</body>
+
+</html>
